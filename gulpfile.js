@@ -11,7 +11,7 @@ var plugins = require('gulp-load-plugins')();
 var browserSync = require('browser-sync');
 //var minimist = require('minimist');
 
-// var cp = require('child_process');
+var cp = require('child_process');
 // var fs = require('fs');
 var del = require('del');
 
@@ -97,7 +97,7 @@ gulp.task('serve', ['assets']/*, 'style', 'script-watch']*/, function() {
 	});
 
 	// gulp.watch('style/**.less', ['style']);
-	// gulp.watch('index.html', ['html']);
+	gulp.watch(['index.html', 'js/**'], browserSync.reload);
 
 	gulp.watch(['gulpfile.js', 'package.json'], function() {
 		cp.spawn('gulp', ['serve'], { stdio: 'inherit' });
