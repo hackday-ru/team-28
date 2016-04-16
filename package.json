@@ -1,0 +1,10 @@
+{
+  "name": "haron-intern",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "intern-runner config=tests/intern"
+  },
+  "devDependencies": {
+    "intern": "~2.2.2"
+  }
+}
