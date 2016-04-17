@@ -41,7 +41,7 @@ var getElementXPath = function (element, ignoreId) {
 
 var ws = new WebSocket('ws://' + document.location.host);
 
-window.addEventListener('mousemove', function (event) {
+document.addEventListener('mousemove', function (event) {
 	ws.send('move ' + event.movementX + ' ' + event.movementY);
 });
 

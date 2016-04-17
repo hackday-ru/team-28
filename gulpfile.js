@@ -61,17 +61,15 @@ gulp.task('serve', ['assets']/*, 'style', 'script-watch']*/, function() {
 gulp.task('express', ['assets']/*, 'style', 'script-watch']*/, function() {
 	var staticServer = express()
 		.use(livereload())
-	    .use(express.static('./'));
-	var server = http.createServer();
-	var wss = ws.Server({ server: server });
+	    .use(express.static('./'))
+	    .listen(5000);
+	var wss = ws.Server({ server: staticServer });
 
 	wss.on('connection', function (ws) {
 		ws.on('message', function (message) {
 			console.log('->', message);
 		});
 	});
-	server.on('request', staticServer);
-	server.listen(5000);
 
 	plugins.livereload.listen();
 
