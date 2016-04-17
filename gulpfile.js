@@ -8,6 +8,9 @@ var plugins = require('gulp-load-plugins')();
 //var buffer = require('vinyl-buffer');
 //var through = require('through2');
 
+var express = require('express');
+var livereload = require('connect-livereload');
+
 var browserSync = require('browser-sync');
 //var minimist = require('minimist');
 
@@ -22,6 +25,11 @@ var pkg = require('./package.json');
 // 		'api-path': 'v1'
 // 	}
 // });
+
+var server = express();
+server.use(livereload());
+server.use(express.static('./'));
+
 var polyfills = ['array.prototype.findindex',
                  'object.assign/dist/browser.js'];
 
@@ -105,6 +113,20 @@ gulp.task('serve', ['assets']/*, 'style', 'script-watch']*/, function() {
 	});
 });
 
+gulp.task('express', ['assets']/*, 'style', 'script-watch']*/, function() {
+	server.listen(5000);
+	plugins.livereload.listen();
+
+	// gulp.watch('style/**.less', ['style']);
+	gulp.watch(['index.html', 'js/**'], plugins.livereload.changed);
+
+	gulp.watch(['gulpfile.js', 'package.json'], function() {
+		cp.spawn('gulp', ['express'], { stdio: 'inherit' });
+		process.exit();
+	});
+});
+
+
 gulp.task('patch-version', function (cb) {
 	if (pkg.rev)
 		return cb();
@@ -163,6 +185,7 @@ function scriptBundle(src, watchUpdate) {
 	build.on('update', rebuild);
 	return rebuild();
 }
+
 function proxyIfNotExist(basePath, proxyPath) {
 	var httpProxy = require('http-proxy');
 	var url = require('url');

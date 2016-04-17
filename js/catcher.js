@@ -41,9 +41,10 @@ var getElementXPath = function (element, ignoreId) {
 var oldAddEventListener = EventTarget.prototype.addEventListener;
 EventTarget.prototype.addEventListener = function(eventName, eventHandler)
 {
-	console.info('register', eventName, 'on', getElementXPath(this));
+	console.info('register', eventName, 'on', this, getElementXPath(this));
 	oldAddEventListener.call(this, eventName, function(event) {
-		console.info('->', eventName, event.keyCode && String.fromCodePoint(event.keyCode), 'on', getElementXPath(event.target));
+		console.info('->', eventName, event.keyCode && String.fromCodePoint(event.keyCode),
+		             'on', getElementXPath(event.target), eventHandler);
 		eventHandler(event);
 	});
 };
