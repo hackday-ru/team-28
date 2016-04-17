@@ -38,10 +38,18 @@ var getElementXPath = function (element, ignoreId) {
 };
 
 // Override for adding event listeners
+
+var ws = new WebSocket('ws://' + document.location.host);
+
+window.addEventListener('mousemove', function (event) {
+	ws.send('move ' + event.movementX + ' ' + event.movementY);
+});
+
 var oldAddEventListener = EventTarget.prototype.addEventListener;
 EventTarget.prototype.addEventListener = function(eventName, eventHandler)
 {
 	console.info('register', eventName, 'on', this, getElementXPath(this));
+	ws.send('register ' + eventName);
 	oldAddEventListener.call(this, eventName, function(event) {
 		console.info('->', eventName, event.keyCode && String.fromCodePoint(event.keyCode),
 		             'on', getElementXPath(event.target), eventHandler);

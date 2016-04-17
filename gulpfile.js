@@ -12,7 +12,9 @@ var express = require('express');
 var livereload = require('connect-livereload');
 
 var browserSync = require('browser-sync');
-//var minimist = require('minimist');
+
+var http = require('http');
+var ws = require('ws');
 
 var cp = require('child_process');
 // var fs = require('fs');
@@ -57,10 +59,19 @@ gulp.task('serve', ['assets']/*, 'style', 'script-watch']*/, function() {
 });
 
 gulp.task('express', ['assets']/*, 'style', 'script-watch']*/, function() {
-	var server = express()
+	var staticServer = express()
 		.use(livereload())
-		.use(express.static('./'))
-		.listen(5000);
+	    .use(express.static('./'));
+	var server = http.createServer();
+	var wss = ws.Server({ server: server });
+
+	wss.on('connection', function (ws) {
+		ws.on('message', function (message) {
+			console.log('->', message);
+		});
+	});
+	server.on('request', staticServer);
+	server.listen(5000);
 
 	plugins.livereload.listen();
 

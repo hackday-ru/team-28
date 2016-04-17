@@ -32,7 +32,6 @@
   "dependencies": {
     "mithril": "^0.2.3",
     "todomvc-common": "^0.1.11",
-    "websocket-multiplexer": "0.0.7",
     "ws": "^1.1.0"
   }
 }
